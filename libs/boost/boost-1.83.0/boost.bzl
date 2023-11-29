@@ -126,17 +126,17 @@ def boost_deps(index):
 
     dist_http_archive(
         index,
-        name = "bzip2",
+        name = "org_bzip_bzip2",
     )
 
     dist_http_archive(
         index,
-        name = "lzma",
+        name = "org_lzma_lzma",
     )
 
     dist_http_archive(
         index,
-        name = "zstd",
+        name = "com_github_facebook_zstd",
     )
 
     dist_http_archive(

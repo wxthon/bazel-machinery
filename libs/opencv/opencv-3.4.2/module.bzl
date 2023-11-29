@@ -9,6 +9,7 @@ _OPENCV_COPTS = [
     "-D__STDC_FORMAT_MACROS",
     "-D__STDC_LIMIT_MACROS",
     "-I$(GENDIR)/external/opencv/private/",
+    "-w",
 ]
 
 _KNOWN_OPTS = [
@@ -196,7 +197,7 @@ def opencv_base(config = None):
 def opencv_module(*args, name = None, config = None,
                   excludes = None, dispatched_files = None,
                   deps = None,
-                  copts = []):
+                  copts = [], linkopts=[]):
     prefix = "modules/{}".format(name)
 
     config = config or []
@@ -262,4 +263,5 @@ def opencv_module(*args, name = None, config = None,
             "-Iexternal/opencv/" + prefix + "/src",
             "-I$(GENDIR)/external/opencv/" + prefix + "/src",
         ] + copts,
+        linkopts = linkopts,
     )

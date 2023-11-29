@@ -60,6 +60,9 @@ opencv_module(
     name = "imgcodecs",
     config = CONFIG,
     deps = [":core", ":imgproc", "@libjpeg", "@libpng"],
+    linkopts = [
+        "-ltiff",
+    ]
 )
 
 opencv_module(

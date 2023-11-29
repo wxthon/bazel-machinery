@@ -49,6 +49,7 @@ COMMON_COPTS = [
     "-Wno-parentheses",
     "-Wno-switch",
     "-Wno-unused-variable",
+    "-w",
 ] + select({
     "@bazel_machinery//conditions:gcc" : [
         "-Wno-discarded-qualifiers",
@@ -247,7 +248,7 @@ cc_binary(
         ":avutil_lib",
         ":avcodec_lib",
         ":libavformat/libavformat.lds",
-        "@bzip2",
+        "@org_bzip_bzip2//:bzip2",
         "@zlib",
     ],
     linkopts = BIN_LINKOPTS + [
