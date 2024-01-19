@@ -9,7 +9,7 @@ cmake(
         "-G Ninja",
     ],
     lib_source = "@fftw3//:all",
-    out_lib_dir = "lib64",
+    out_lib_dir = "lib",
     #out_include_dir = "fftw3/include",
     out_include_dir = "include",
     out_shared_libs = [
