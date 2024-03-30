@@ -215,12 +215,12 @@ DIST_DEPS = {
     },
     "com_github_grpc_grpc": {
         "distdir": "grpc",
-        "archive": "v1.59.1.tar.gz",
+        "archive": "v1.59.4.tar.gz",
         "urls": [
-            "https://github.com/grpc/grpc/archive/refs/tags/v1.59.1.tar.gz",
+            "https://github.com/grpc/grpc/archive/refs/tags/v1.59.4.tar.gz",
         ],
-        "strip_prefix": "grpc-1.59.1",
-        "sha256": "916f88a34f06b56432611aaa8c55befee96d0a7b7d7457733b9deeacbc016f99",
+        "strip_prefix": "grpc-1.59.4",
+        "sha256": "6edc67c2ad200c5b618c421f6e8c1b734a4aa3e741975e683491da03390ebf63",
         "used_in": [
             "additional_distfiles",
         ]
@@ -394,4 +394,30 @@ DIST_DEPS = {
             "additional_distfiles",
         ]
     },
+    "highfive": {
+        "distdir": "highfive",
+        "archive": "v2.9.0.tar.gz",
+        "sha256": "6301def8ceb9f4d7a595988612db288b448a3c0546f6c83417dab38c64994d7e",
+        "strip_prefix": "HighFive-2.9.0",
+        "urls": [
+            "https://github.com/BlueBrain/HighFive/archive/refs/tags/v2.9.0.tar.gz",
+        ],
+        "build_file": "@bazel_machinery//libs/highfive/highfive-2.9.0:highfive.BUILD",
+        "used_in": [
+            "additional_distfiles",
+        ]
+    },
+    "cocoapi": {
+        "distdir": "cocoapi",
+        "archive": "8c9bcc3cf640524c4c20a9c40e89cb6a2f2fa0e9.tar.gz",
+        "sha256": "4dd3450bab2287d1c1b271cf4a1420db05294194f0ad9af4e3af592d6f2b4410",
+        "strip_prefix": "cocoapi-8c9bcc3cf640524c4c20a9c40e89cb6a2f2fa0e9",
+        "urls": [
+            "http://github.com/cocodataset/cocoapi/archive/8c9bcc3cf640524c4c20a9c40e89cb6a2f2fa0e9.tar.gz",
+        ],
+        "build_file": "@bazel_machinery//libs/cocoapi/master:cocoapi.BUILD",
+        "used_in": [
+            "additional_distfiles",
+        ]
+    }
 }

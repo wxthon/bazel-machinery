@@ -2641,3 +2641,46 @@ boost_library(
         ":variant2",
     ],
 )
+
+cc_library(
+    name = "python",
+    srcs = glob([
+        "libs/python/include/**/*.h",
+        "libs/python/include/**/*.hpp",
+        "libs/python/src/*.cpp",
+        "libs/python/src/**/*.cpp",
+    ]),
+    includes = [
+        "libs/python/include",
+        "libs/python/include/boost/python",
+    ],
+    copts = [
+        "-I/usr/include/python3.8",
+    ],
+    deps = [
+        ":align",
+        ":bind",
+        ":config",
+        ":conversion",
+        ":core",
+        ":detail",
+        ":foreach",
+        ":function",
+        ":graph",
+        ":integer",
+        ":iterator",
+        ":lexical_cast",
+        ":mpl",
+        ":numeric_conversion",
+        ":preprocessor",
+        ":property_map",
+        ":smart_ptr",
+        ":static_assert",
+        ":tuple",
+        ":type_traits",
+        ":utility",        
+    ],
+    visibility = [
+        "//visibility:public",
+    ]
+)
