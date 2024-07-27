@@ -289,7 +289,7 @@ cc_library(
             "@mklml_repo_darwin//:mklml"
         ],
         "//conditions:default": [
-            "@cuda//:cuda",
+            #"@cuda//:cuda",
         ],
     }) + [
         "@com_github_google_glog//:glog",
