@@ -419,5 +419,56 @@ DIST_DEPS = {
         "used_in": [
             "additional_distfiles",
         ]
-    }
+    },
+    "range-v3": {
+        "distdir": "range-v3",
+        "archive": "0.12.0.tar.gz",
+        "sha256": "015adb2300a98edfceaf0725beec3337f542af4915cec4d0b89fa0886f4ba9cb",
+        "strip_prefix": "range-v3-0.12.0",
+        "urls": [
+            "https://github.com/ericniebler/range-v3/archive/refs/tags/0.12.0.tar.gz",
+        ],
+        "used_in": [
+            "additional_distfiles",
+        ]
+    },
+    "easy_profiler": {
+        "distdir": "easy_profiler",
+        "archive": "v2.1.0.tar.gz",
+        "sha256": "fabf95d59ede9da4873aebd52ef8a762fa8578dcdbcc6d7cdd811b5a7c3367ad",
+        "strip_prefix": "easy_profiler-2.1.0",
+        "urls": [
+            "https://github.com/yse/easy_profiler/archive/refs/tags/v2.1.0.tar.gz",
+        ],
+        "build_file": "@bazel_machinery//libs/easy_profiler/v2.1.0:easy_profiler.BUILD",
+        "used_in": [
+            "additional_distfiles",
+        ]
+    },
+    "libpqxx": {
+        "distdir": "libpqxx",
+        "archive": "7.9.1.tar.gz",
+        "sha256": "4fafd63009b1d6c2b64b8c184c04ae4d1f7aa99d8585154832d28012bae5b0b6",
+        "strip_prefix": "libpqxx-7.9.1",
+        "urls": [
+            "https://github.com/jtv/libpqxx/archive/refs/tags/7.9.1.tar.gz",
+        ],
+        "build_file": "@bazel_machinery//libs/libpqxx/7.9.1:libpqxx.BUILD",
+        "used_in": [
+            "additional_distfiles",
+        ]
+    },
+    "drogon": {
+        "distdir": "drogon",
+        "archive": "v1.9.5.tar.gz",
+        "sha256": "",
+        "strip_prefix": "drogon-1.9.5",
+        "urls": [
+            "https://github.com/drogonframework/drogon/archive/refs/tags/v1.9.5.tar.gz",
+        ],
+        "build_file": "@bazel_machinery//libs/drogon/v1.9.5:drogon.BUILD",
+        "used_in": [
+            "additional_distfiles",
+        ]
+    },
 }

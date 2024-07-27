@@ -95,10 +95,11 @@ cc_library(
     }),
     defines = [
         "C10_USE_GLOG=0",
-        "_GLIBCXX_USE_CXX11_ABI=0",
+        "USE_C10D_NCCL=1",
     ],
     local_defines = [
         "NDEBUG=1",
+        "_GLIBCXX_USE_CXX11_ABI=0",
     ],
     linkopts = [
         "-L%s",
@@ -160,6 +161,14 @@ LIBTORCH_ARCHIVES = {
         "strip_prefix": "libtorch",
         "sha256": "843ad19e769a189758fd6a21bfced9024494b52344f4bc4fb75f75d36e6ea0c7",
     },
+    "2.2.2+cu118": {
+        "urls": [
+            "/workspace/install/libtorch-cxx11-abi-shared-with-deps-2.2.2+cu118.zip",
+            "https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.2.2%2Bcu118.zip",
+        ],
+        "strip_prefix": "libtorch",
+        "sha256": "265f063a32ee880352bbab82232a72e385e981b77128206ea3d2170344b7aa8b",
+    },
     "2.2.2+cu121": {
         "urls": [
             "/workspace/install/libtorch-cxx11-abi-shared-with-deps-2.2.2+cu121.zip",
@@ -175,10 +184,18 @@ def _libtorch_repo_impl(rctx):
     version = rctx.attr.version
     print("%s: libtorch(%s)" % (name, version))
     # use the correct archive configuration
-    if 'urls' not in rctx.attr.archive:
+    archive = {}
+    if rctx.attr.version in LIBTORCH_ARCHIVES:
         archive = LIBTORCH_ARCHIVES[rctx.attr.version]
     else:
-        archive = rctx.attr.archive
+        archive = {
+            "urls": [],
+            "strip_prefix": "",
+        }
+    if rctx.attr.urls:
+        archive["urls"] = rctx.attr.urls
+    if rctx.attr.strip_prefix:
+        archive["strip_prefix"] = rctx.attr.strip_prefix
 
     # find python library
     ret = rctx.execute([
@@ -202,24 +219,30 @@ def _libtorch_repo_impl(rctx):
             fail('Not found /usr/local/cuda-12, please install it')
     else:
         fail('Bad version: ' + version)
-    abi_define = "_GLIBCXX_USE_CXX11_ABI=0"
+    abi_define = "_GLIBCXX_USE_CXX11_ABI=1"
     # print(archive)
     for url in archive['urls']:
+        """
         if url.count('cxx11-abi') > 0:
             abi_define = "_GLIBCXX_USE_CXX11_ABI=1"
         else:
             abi_define = "_GLIBCXX_USE_CXX11_ABI=0"
+        """
         if url.startswith('http'):           
             ret = rctx.download_and_extract(
                 url, sha256=archive['sha256'],
                 stripPrefix = archive['strip_prefix'])
             if ret.success:
                 break
-        elif url.startswith('file') or url.startswith('/'):
+        elif url.startswith('file'):
             archive_name = url.replace('file://', '')
             ret = rctx.extract(archive_name,
                                stripPrefix = archive['strip_prefix'])
             break
+        elif url.startswith('/'):
+            for target in ['bin', 'include', 'lib',
+                           'share', 'build-hash', 'build-version']:
+                rctx.symlink('%s/%s' % (url, target), target)
     # print('download ok')
     
     rctx.file("BUILD.bazel", """
@@ -249,11 +272,12 @@ cc_library(
         ]),
     }),
     defines = [
+        "USE_C10D_NCCL=1",
         "C10_USE_GLOG=0",
-        "%s",
     ],
     local_defines = [
         "NDEBUG=1",
+        "%s",
     ],
     linkopts = [
         "-ltorch",
@@ -264,7 +288,9 @@ cc_library(
         "@bazel_tools//src/conditions:darwin": [
             "@mklml_repo_darwin//:mklml"
         ],
-        "//conditions:default": [],
+        "//conditions:default": [
+            "@cuda//:cuda",
+        ],
     }) + [
         "@com_github_google_glog//:glog",
     ],
@@ -289,7 +315,7 @@ filegroup(
     srcs = glob([
         "lib/*.so",
         "lib/*.so.*",
-    ]),  
+    ]),
 )
 filegroup(
     name = "headers",
@@ -307,7 +333,22 @@ filegroup(
         "WORKSPACE",
     ]),
 )
-""" % (abi_define, python_lib_name))
+config_setting(
+    name = "libtorch_package",
+    constraint_values = [
+        "@platforms//os:linux",
+    ]
+)
+config_setting(
+    name = "pytorch_package",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+    define_values = {
+        "torch_package": "pytorch",
+    }
+) 
+""" % (abi_define, python_lib_name.strip()))
     print("Remember to add 'build --copt=-D%s' to .bazelrc" % abi_define)
 
 libtorch_repo = repository_rule(
@@ -315,6 +356,7 @@ libtorch_repo = repository_rule(
     local = True,
     attrs = {
         "version": attr.string(mandatory=True),
-        "archive": attr.string_dict(),
+        "urls": attr.string_list(default=[]),
+        "strip_prefix": attr.string(default=''),
     }
 )

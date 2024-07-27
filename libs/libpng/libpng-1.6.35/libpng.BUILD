@@ -59,6 +59,7 @@ cc_library(
     copts = [
         "-DHAVE_CONFIG_H",
         "-I$(GENDIR)/external/libpng/private",
+        "-w",
     ],
     deps = ["@zlib"],
 )

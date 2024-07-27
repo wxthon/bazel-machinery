@@ -26,6 +26,7 @@ opencv_module(
         "mathfuncs_core" : ["sse2", "avx", "avx2"],
     },
     deps = ["@eigen", "@zlib"],
+    linkopts = ["-lz"]
 )
 
 opencv_module(
@@ -61,7 +62,7 @@ opencv_module(
     config = CONFIG,
     deps = [":core", ":imgproc", "@libjpeg", "@libpng"],
     linkopts = [
-        "-ltiff",
+        #"-ltiff",
     ]
 )
 
